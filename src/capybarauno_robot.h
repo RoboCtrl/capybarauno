@@ -57,7 +57,7 @@ class CapybaraunoConfig : public MoveConfig, public OdomConfig {
 class CapybaraunoRobot {
 	public:
 		/// @brief constructor, that passes the config to the sub-components
-		CapybaraunoRobot( CapybaraunoConfig config ) : config_(config), odom_(config_), move_(config_) {};
+		CapybaraunoRobot( CapybaraunoConfig config ) : config_(config), odom_(config_), move_(config_), hb_counter_(0) {};
 		
 		/// @brief initializes the object. should only be called when the config has been fully populated
 		void init() {
@@ -66,6 +66,13 @@ class CapybaraunoRobot {
 				exit( 0 );
 			if( !odom_.init() )
 				exit( 0 );
+			
+			// init heartbeat variables
+			heartbeat_.beat = 1;
+			heartbeat_packet_.id=Heartbeat_Payload_ID;
+			heartbeat_packet_.seq=0;
+			heartbeat_packet_.heartbeat=heartbeat_;
+			beat_ = 0;
 		}
 		
 		/// @brief returns the current odometry via references
@@ -81,8 +88,29 @@ class CapybaraunoRobot {
 			move_.sendSpeedCmd( tv*1000, rv*1000 );
 		}
 		
+		void sendHeartbeat(){
+			if( hb_counter_%50==0 ) {
+				heartbeat_packet_.seq++;
+				char heartbuff[255];
+				char* pEnd=Packet_write( &heartbeat_packet_, heartbuff, config_.OdomConfig::comm_ascii_ );
+				sendToUart( odom_.serial_fd_, heartbuff, pEnd-heartbuff, 0 );
+				const char heart_1[] = "\xe2\x99\xa1";
+				const char heart_2[] = "\xe2\x99\xa5";
+				if( beat_ ) {
+					printf( "%s\n", heart_1 );
+					beat_=0;
+				} else {
+					printf( "%s\n", heart_2 );
+					beat_=1;
+				}
+
+			}
+			hb_counter_++;
+		}
+
 		void spinOnce() {
 			odom_.spinOnce();
+			sendHeartbeat();
 		}
 		
 		void spin() {
@@ -97,6 +125,11 @@ class CapybaraunoRobot {
 		EncoderOdom odom_;
 		/// @brief object to send movement commands to the robot
 		CapybaraunoMove move_;
+		
+		unsigned int hb_counter_;
+		int beat_;
+		struct Packet heartbeat_packet_;
+		struct Heartbeat_Payload heartbeat_;
 };
 
 

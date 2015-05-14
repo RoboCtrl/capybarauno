@@ -6,10 +6,15 @@
 using namespace std;
 
 volatile double tv = 0, rv = 0;
+
+
+
 void commandVelCallback(const geometry_msgs::TwistConstPtr twist){
 	tv = twist->linear.x;
 	rv = twist->angular.z;
 }
+
+
 
 int main(int argc, char** argv) {
 	CapybaraunoConfig config;

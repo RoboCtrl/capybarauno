@@ -48,8 +48,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
-
-
 int main( int argc, char **argv ) {
 	CapybaraunoConfig config;
 	
@@ -130,9 +128,9 @@ int main( int argc, char **argv ) {
 		
 		robot.setSpeed( tv, rv );
 		printf( "\rodom: <%f, %f, %f>, speed: <%f %f>            ", x, y, theta, tv, rv );
-		for( int i=0; i<2; i++ ) {
+		for( int i=0; i<1; i++ ) {
 			robot.spinOnce();
-			usleep( 1000 );
+			usleep( 100 );
 		}
 	}
 	//

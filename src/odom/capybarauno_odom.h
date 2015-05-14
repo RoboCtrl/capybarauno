@@ -255,7 +255,7 @@ class EncoderOdom {
 		/// configuration object
 		OdomConfig &config_;
 		/// serial connection file descriptor
-		int serial_fd_;
+		public: int serial_fd_;
 		/// structure to store incomplete packets (read from serial) until we can parse them
 		struct Packet_Decoder packet_decoder_;
 		/// odometry: x-position
