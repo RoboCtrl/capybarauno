@@ -44,10 +44,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 /// @class a class that combines the config for the odometry and the move/joystick classes
-class CapybaraunoConfig : public JoyConfig, public OdomConfig {
+class CapybaraunoConfig : public MoveConfig, public OdomConfig {
 	public:
 		void printParameters() {
-			JoyConfig::printParameters();
+			MoveConfig::printParameters();
 			OdomConfig::printParameters();
 		}
 };
@@ -90,7 +90,6 @@ class CapybaraunoRobot {
 				spinOnce();
 			}
 		}
-		
 	protected:
 		/// @brief object holding the config for this class
 		CapybaraunoConfig config_;

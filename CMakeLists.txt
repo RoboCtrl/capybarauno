@@ -181,6 +181,22 @@ add_executable(capybarauno_robot_test
     src/malComm/serialStuff.cpp
 )	
 
+add_executable( capybarauno_robot_node
+	src/capybarauno_robot_node.cpp
+	
+	src/serial_interface.cpp
+    src/malComm/mal_primitives.cpp
+    src/malComm/mal_comm.cpp
+    src/malComm/heartbeat_payload.cpp
+    #src/malComm/configuration_payload.cpp
+    src/malComm/dumb_payload.cpp
+    src/malComm/init_payload.cpp
+    src/malComm/dummy_payload.cpp
+    src/malComm/speed_payload.cpp
+    src/malComm/state_payload.cpp
+    src/malComm/serialStuff.cpp
+)
+
 
 
 target_link_libraries(capybarauno_odom_node
@@ -190,6 +206,11 @@ target_link_libraries(capybarauno_odom_node
 target_link_libraries(capybarauno_joy_node
    ${catkin_LIBRARIES}
 )
+
+target_link_libraries(capybarauno_robot_node
+   ${catkin_LIBRARIES}
+)
+
 
 
 #############

@@ -67,7 +67,38 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 /** @class class to put all the parameters for the project into a single object. */
-class JoyConfig {
+class MoveConfig {
+	public:
+		/// multiplier for translational movement commands
+		double trans_multiplier_;
+		/// multiplier for rotational movement commands
+		double rot_multiplier_;
+		/// multiplier for translational commands when the boost button is held
+		double boost_multiplier_;
+		/// serial port, e.g. "/dev/ttyACM0"
+		std::string comm_port_;
+		/// set to 1 if serial communication is in ascii format, and to 0 for binary format
+		int comm_ascii_;
+		/// if non-zero, we print a few more messages to the console
+		int debug_;
+		
+		/// prints the config to the console
+		void printParameters( void ) {
+			printf( "joy. configuration:\n" );
+			
+			printf( "  %s %f\n", "trans_multiplier", trans_multiplier_ );
+			printf( "  %s %f\n", "rot_multiplier", rot_multiplier_ );
+			printf( "  %s %f\n", "boost_multiplier", boost_multiplier_ );
+			
+			printf( "  %s %s\n", "comm_port", comm_port_.c_str() );
+			printf( "  %s %i\n", "comm_ascii", comm_ascii_ );
+			printf( "  %s %i\n", "debug", debug_ );
+		}
+};
+
+
+/** @class class to put all the parameters for the project into a single object. */
+class JoyConfig : public MoveConfig {
 	public:
 		/// joystick axis for translational commands (forward/backward)
 		int trans_axis_;
@@ -79,20 +110,8 @@ class JoyConfig {
 		int stop_button_;
 		/// dead_man_button (unused at the moment)
 		int dead_man_button_;
-		/// multiplier for translational movement commands
-		double trans_multiplier_;
-		/// multiplier for rotational movement commands
-		double rot_multiplier_;
-		/// multiplier for translational commands when the boost button is held
-		double boost_multiplier_;
 		/// topic name to subscribe at for joystick messages
 		std::string joy_topic_;
-		/// serial port, e.g. "/dev/ttyACM0"
-		std::string comm_port_;
-		/// set to 1 if serial communication is in ascii format, and to 0 for binary format
-		int comm_ascii_;
-		/// if non-zero, we print a few more messages to the console
-		int debug_;
 		
 		/// prints the config to the console
 		void printParameters( void ) {
@@ -121,7 +140,7 @@ class JoyConfig {
 class CapybaraunoMove {
 	public:
 		/// @brief constructor, that expects that ros::init has already been called
-		CapybaraunoMove( JoyConfig &cfg ) : config_(cfg) {
+		CapybaraunoMove(MoveConfig &cfg ) : config_(cfg) {
 			//init();
 		}
 		
@@ -191,7 +210,7 @@ class CapybaraunoMove {
 		}
 		
 		/// configuration object
-		JoyConfig &config_;
+		MoveConfig &config_;
 		/// serial connection file descriptor
 		int serial_fd_;
 		/// packet that is send via serial port. used to send speed commands
