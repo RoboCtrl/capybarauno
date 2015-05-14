@@ -128,7 +128,7 @@ int main( int argc, char **argv ) {
 		
 		robot.setSpeed( tv, rv );
 		printf( "\rodom: <%f, %f, %f>, speed: <%f %f>            ", x, y, theta, tv, rv );
-		for( int i=0; i<1; i++ ) {
+		for( int i=0; i<10; i++ ) {
 			robot.spinOnce();
 			usleep( 100 );
 		}

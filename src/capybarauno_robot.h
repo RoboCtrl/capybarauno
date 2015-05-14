@@ -88,6 +88,7 @@ class CapybaraunoRobot {
 			move_.sendSpeedCmd( tv*1000, rv*1000 );
 		}
 		
+		/// @brief sends a heartbeat on every 50th call of this function. wihtout the heartbeat, the robot will stop about every second.
 		void sendHeartbeat(){
 			if( hb_counter_%50==0 ) {
 				heartbeat_packet_.seq++;
@@ -107,12 +108,14 @@ class CapybaraunoRobot {
 			}
 			hb_counter_++;
 		}
-
+		
+		/// @brief performs periodic tasks: querying the odometry (to empty the serial buffer) and sends a heartbeat signal.
 		void spinOnce() {
 			odom_.spinOnce();
 			sendHeartbeat();
 		}
 		
+		/// @brief calls spinOnce in a loop
 		void spin() {
 			while( true ) {
 				spinOnce();
